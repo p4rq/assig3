@@ -1,0 +1,93 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your App Title</title>
+  
+  <!-- Подключение Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Можно добавить другие стили или скрипты, если необходимо -->
+
+</head>
+<body>
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Your App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/exchangeRate">exchangeRate</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="/register">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Log In</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  <div class="container">
+    <h1 class="mt-5">Welcome to Your App</h1>
+
+
+<!-- Display Exchange Rate Data -->
+<h2 class="mt-4">Exchange Rates</h2>
+<ul class="list-group">
+  <% exchangeRateData.forEach(rate => { %>
+    <li class="list-group-item">
+      <p>Base Code: <%= rate.data.base_code %></p>
+      <ul>
+        <% Object.entries(rate.data.rates).slice(0, 10).forEach(([currency, rateValue]) => { %>
+          <li><%= currency %> - <%= rateValue %></li>
+        <% }); %>
+      </ul>
+    </li>
+  <% }); %>
+</ul>
+
+    <!-- User Input Form -->
+    <form action="/refreshDataForExchangeRate" method="post" class="mt-4">
+        <button type="submit" class="btn btn-primary">Refresh Data</button>
+      </form>
+    <%= console.log(exchangeRateData) %>
+
+    <!-- Подключение Bootstrap JavaScript и других скриптов, если необходимо -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- Добавьте этот блок кода в конец файла -->
+<script>
+    // Отправка запроса на обновление данных при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('/refreshDataForExchangeRate', { method: 'POST' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to refresh data');
+          }
+          // Перенаправляем пользователя на главную страницу после успешного обновления
+          window.location.href = '/';
+        })
+        .catch(error => {
+          console.error('Error refreshing data:', error);
+        });
+    });
+  </script>
+  
+  </div>
+  
+</body>
+</html>
