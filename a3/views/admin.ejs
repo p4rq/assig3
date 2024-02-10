@@ -1,115 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="container mt-5">
 
-  <div class="container">
-    <h1 class="mt-4">Admin Page</h1>
+    <h1 class="mb-4">Admin Panel</h1>
 
-    <button class="btn btn-primary" onclick="showUsers()">Show Users</button>
-    <button class="btn btn-success" onclick="addUser()">Add User</button>
+    <!-- Форма для создания нового пользователя -->
+    <form action="/admin/create" method="post" class="mb-4">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
 
-    <ul id="userList" class="list-group mt-4">
-      <% if (locals.users && locals.users.length > 0) { %>
-        <h3>User List</h3>
-        <% locals.users.forEach(user => { %>
-          <div class="user-item">
-            <p><%= user.username %> (Admin: <%= user.isAdmin %>)</p>
-            <button class="btn btn-danger" onclick="deleteUser('<%= user._id %>')">Delete</button>
-            <button class="btn btn-warning" onclick="editUser('<%= user._id %>')">Edit</button>
-          </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="userId" class="form-label">User ID:</label>
+            <input type="text" id="userId" name="userId" class="form-control" required>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" id="isAdmin" name="isAdmin" class="form-check-input">
+            <label for="isAdmin" class="form-check-label">Admin</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </form>
+
+    <!-- Отображение списка пользователей -->
+    <ul class="list-group">
+        <% users.forEach((user) => { %>
+            <li class="list-group-item">
+                <strong><%= user.username %></strong>
+                <span><%= user.userId %></span>
+                <span><%= user.isAdmin ? 'Admin' : 'User' %></span>
+
+                <!-- Форма для обновления данных пользователя -->
+                <form action="/admin/update/<%= user._id %>" method="post" class="mb-2">
+                    <div class="mb-3">
+                        <label for="newUsername" class="form-label">New Username:</label>
+                        <input type="text" id="newUsername" name="newUsername" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="newUserId" class="form-label">New User ID:</label>
+                        <input type="text" id="newUserId" name="newUserId" class="form-control">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" id="newIsAdmin" name="newIsAdmin" class="form-check-input">
+                        <label for="newIsAdmin" class="form-check-label">Admin</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </form>
+
+                <!-- Форма для удаления пользователя -->
+                <form action="/admin/delete/<%= user._id %>" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </li>
         <% }); %>
-      <% } else { %>
-        <p>No users found</p>
-      <% } %>
     </ul>
-  </div>
 
-  <script>
-    function showUsers() {
-      fetch('/admin')
-        .then(response => response.json())
-        .then(data => {
-          const userListDiv = document.getElementById('userList');
-          userListDiv.innerHTML = "<h3>User List</h3>";
-
-          data.forEach(user => {
-            userListDiv.innerHTML += `<p>${user.username} (Admin: ${user.isAdmin})</p>`;
-          });
-        })
-        .catch(error => console.error('Error fetching users:', error));
-    }
-
-    function addUser() {
-      const username = prompt('Enter username:');
-      const password = prompt('Enter password:');
-      const isAdmin = confirm('Is this user an admin?');
-
-      fetch('/admin/addUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, isAdmin }),
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('User added successfully:', data);
-          showUsers();  // Update the user list after adding a user
-        })
-        .catch(error => console.error('Error adding user:', error));
-    }
-    async function deleteUser(userId) {
-      try {
-        const response = await fetch(`/admin/deleteUser/${userId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          console.log('User deleted successfully:', userId);
-          // Refresh user list or update UI as needed
-          showUsers();
-        } else {
-          console.error('Error deleting user:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error deleting user:', error);
-      }
-    }
-
-    async function editUser(userId) {
-      try {
-        const response = await fetch(`/admin/updateUser/${userId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // Include data for updating user (e.g., username)
-          body: JSON.stringify({ username: 'newUsername' }),
-        });
-
-        if (response.ok) {
-          console.log('User updated successfully:', userId);
-          // Refresh user list or update UI as needed
-          showUsers();
-        } else {
-          console.error('Error updating user:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error updating user:', error);
-      }
-    }
-
-  </script>
-
+    <!-- Подключение Bootstrap JS (если необходимо) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

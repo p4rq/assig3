@@ -69,23 +69,6 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <!-- Добавьте этот блок кода в конец файла -->
-<script>
-    // Отправка запроса на обновление данных при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function () {
-      fetch('/refreshDataForExchangeRate', { method: 'POST' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to refresh data');
-          }
-          // Перенаправляем пользователя на главную страницу после успешного обновления
-          window.location.href = '/';
-        })
-        .catch(error => {
-          console.error('Error refreshing data:', error);
-        });
-    });
-  </script>
   
   </div>
   

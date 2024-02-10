@@ -5,7 +5,6 @@ const RequestHistory = require('../models/requestHistory');
 const apiKey = '19d5df6d69ca4e3ea78954d7cd51830c'
 const getNewsData = async (userRequest) => {
   try {
-    // `https://newsapi.org/v2/top-headlines?apiKey=${19d5df6d69ca4e3ea78954d7cd51830c}&country=us`
     const newsApiResponse = await axios.get(`https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=us`);
     
     // Сохранение данных в MongoDB
@@ -19,7 +18,7 @@ const getNewsData = async (userRequest) => {
     // Сохранение запроса в истории
     await saveRequestHistory(userRequest, 'News Data');
 
-    return { success: true, message: 'Данные новостей успешно получены и сохранены' };
+    return { success: true, message: 'Данные новостей успешно получены и сохранены', data: newsApiResponse.data.articles };
   } catch (error) {
     console.error(error);
     return { success: false, message: 'Ошибка при получении данных новостей' };

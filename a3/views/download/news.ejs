@@ -1,0 +1,30 @@
+<!-- views/download/news.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Data</title>
+</head>
+<body>
+  <h1>News Data</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>User Request</th>
+        <th>Timestamp</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% newsData.forEach(entry => { %>
+        <tr>
+          <td><%= entry.userRequest %></td>
+          <td><%= entry.timestamp %></td>
+          <td><%= JSON.stringify(entry.data) %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>
