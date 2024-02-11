@@ -3,7 +3,6 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 
-// Middleware to check if the user is an admin
 const isAdmin = (req, res, next) => {
   if (req.session.userId && req.session.isAdmin) {
     next();
@@ -12,7 +11,6 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-// Маршрут для отображения административной панели
 router.get('/', (req, res) => {
   // Найти всех пользователей (не удаленных)
   User.find({ deletionDate: null })
@@ -25,7 +23,6 @@ router.get('/', (req, res) => {
       });
 });
 
-// Маршрут для обновления данных пользователя
 router.post('/update/:userId', (req, res) => {
   const { newUsername, newUserId, newIsAdmin } = req.body;
 
@@ -37,7 +34,7 @@ router.post('/update/:userId', (req, res) => {
   })
   .then((updatedUser) => {
       console.log('Пользователь успешно обновлен:', updatedUser);
-      res.redirect('/admin');  // Исправленный путь
+      res.redirect('/admin');  
   })
   .catch((error) => {
       console.error('Ошибка при обновлении пользователя:', error);
@@ -45,7 +42,6 @@ router.post('/update/:userId', (req, res) => {
   });
 });
 
-// Маршрут для удаления пользователя (устанавливает deletionDate)
 router.post('/delete/:userId', (req, res) => {
   User.findByIdAndUpdate(req.params.userId, { deletionDate: new Date() })
       .then((deletedUser) => {
@@ -58,6 +54,5 @@ router.post('/delete/:userId', (req, res) => {
       });
 });
 
-// Добавь другие маршруты для обновления, удаления и отображения данных пользователей при необходимости
 
 module.exports = router;
