@@ -7,7 +7,6 @@ const getNewsData = async (userRequest) => {
   try {
     const newsApiResponse = await axios.get(`https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=us`);
     
-    // Сохранение данных в MongoDB
     const newsData = new News({
       data: newsApiResponse.data,
       userRequest,
@@ -15,7 +14,6 @@ const getNewsData = async (userRequest) => {
     });
     await newsData.save();
 
-    // Сохранение запроса в истории
     await saveRequestHistory(userRequest, 'News Data');
 
     return { success: true, message: 'Данные новостей успешно получены и сохранены', data: newsApiResponse.data.articles };
@@ -31,10 +29,8 @@ const getExchangeRateData = async (userRequest) => {
     const exchangeRateApiUrl = `https://open.er-api.com/v6/latest/${baseCurrency}?apikey=${apiKey}`;
   
     try {
-      // Запрос данных о курсах валют
       const exchangeRateApiResponse = await axios.get(exchangeRateApiUrl);
   
-      // Сохранение данных в MongoDB
       const exchangeRateData = new ExchangeRate({
         data: exchangeRateApiResponse.data,
         userRequest,
@@ -42,7 +38,6 @@ const getExchangeRateData = async (userRequest) => {
       });
       await exchangeRateData.save();
   
-      // Сохранение запроса в истории
       await saveRequestHistory(userRequest, 'Exchange Rate Data');
   
       return { success: true, message: 'Данные курсов валют успешно получены и сохранены' };
@@ -55,7 +50,6 @@ const getExchangeRateData = async (userRequest) => {
 
   const saveRequestHistory = async (userRequest, dataType) => {
     try {
-      // Сохранение запроса в истории
       const requestHistory = new RequestHistory({
         userRequest,
         dataType,
