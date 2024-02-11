@@ -4,7 +4,6 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
-// Login route with input validation
 router.get('', (req, res) => {
   res.render('../views/login.ejs', { error: null }); // Define 'error' as null initially
 });
@@ -28,7 +27,7 @@ router.post('/', [
       console.log('Login Successful:', user);
 
       req.session.userId = user.userId;
-      req.session.isAdmin = user.isAdmin; // Добавим это для сохранения статуса администратора в сессии
+      req.session.isAdmin = user.isAdmin; 
 
       if (user.isAdmin) {
         console.log('Redirecting to Admin Page');
