@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
 });
 
-// Middleware to update the 'updateDate' field before saving
 userSchema.pre('save', function (next) {
   this.updateDate = new Date();
   next();
