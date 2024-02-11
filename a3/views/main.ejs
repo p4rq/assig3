@@ -6,10 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your App Title</title>
   
-  <!-- Подключение Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-  <!-- Можно добавить другие стили или скрипты, если необходимо -->
 
 </head>
 <body>
@@ -43,8 +41,6 @@
   <div class="container">
     <h1 class="mt-5">Welcome to Your App</h1>
 
-   <!-- Display News Data -->
-<!-- Display News Data -->
 <h2 class="mt-4">Latest News</h2>
 <ul class="list-group">
   <% newsData.forEach(news => { %>
@@ -62,13 +58,11 @@
 
 
 
-    <!-- User Input Form -->
     <form action="/refreshDataForNews" method="post" class="mt-4">
       <button type="submit" class="btn btn-primary">Refresh Data</button>
     </form>
     <%= console.log(newsData) %>
 
-    <!-- Подключение Bootstrap JavaScript и других скриптов, если необходимо -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
